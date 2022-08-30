@@ -1,5 +1,5 @@
 //modified by: Jasdeep Singh
-//date: 8/23/2022
+//date: 08/24/2022
 //
 //author: Gordon Griesel
 //date: Spring 2022
@@ -23,11 +23,11 @@ using namespace std;
 class Global {
 public:
 	int xres, yres;
-	float w;
-	float dir;
-	float pos[2];
+    float red, green, blue;
+    float w;
+    float dir;
+    float pos[2];
 	Global();
-
 } g;
 
 class X11_wrapper {
@@ -81,12 +81,15 @@ int main()
 
 Global::Global()
 {
-	xres = 600;
-	yres = 300;
-	w = 20.0f;
-	dir = 25.0f;
-	pos[0] = 0.0f + w;
-	pos[1] = g.yres / 2.0f;
+	xres = 400;
+	yres = 200;
+    red = 0.5f;
+    green = 0.5f;
+    blue = 0.9f;
+    w = 20.0f;
+    dir = 25.0f;
+    pos[0] = 0.0f + w;
+    pos[1] = g.yres / 2.0f;
 }
 
 X11_wrapper::~X11_wrapper()
@@ -249,17 +252,17 @@ void init_opengl(void)
 
 void physics()
 {
-	
-	g.pos[0] += g.dir;
-	if (g.pos[0] >= (g.xres - g.w)) {
-		g.pos[0] = (g.xres - g.w);
-		g.dir = -g.dir;
-	}
-	if (g.pos[0] <= g.w) {
-		g.pos[0] = g.w;
-		g.dir = -g.dir;
-	}
-	
+    g.pos[0] += g.dir;
+    if (g.pos[0] >= (g.xres - g.w)) {
+        g.pos[0] = (g.xres - g.w);
+        g.dir = -g.dir;
+        g.red += 0.1f;
+    }
+    if (g.pos[0] <= g.w) {
+        g.pos[0] = g.w;
+        g.dir = -g.dir;
+        g.red += 0.1f;
+    }
 }
 
 void render()
@@ -268,7 +271,7 @@ void render()
 	glClear(GL_COLOR_BUFFER_BIT);
 	//Draw box.
 	glPushMatrix();
-	glColor3ub(150, 160, 220);
+	glColor3f(g.red, g.green, g.blue);
 	glTranslatef(g.pos[0], g.pos[1], 0.0f);
 	glBegin(GL_QUADS);
 		glVertex2f(-g.w, -g.w);
